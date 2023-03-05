@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="libreria_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="categorias">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="categoria" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="descripcion" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="activo" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="clientes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombres" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="apellidos" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="telefono" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="direccion" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="dui" Type="varchar" MaxLength="12" Nullable="false" />
+    <Property Name="activo" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="empleados">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombres" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="apellidos" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="telefono" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="direccion" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="edad" Type="int" Nullable="false" />
+    <Property Name="dui" Type="varchar" MaxLength="12" Nullable="false" />
+    <Property Name="activo" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="factura_productos">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_producto" Type="bigint" Nullable="false" />
+    <Property Name="cant_prods" Type="int" Nullable="false" />
+    <Property Name="sub_total" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+    <Property Name="id_factura" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="facturas">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fecha" Type="datetime" Nullable="false" />
+    <Property Name="id_cliente" Type="bigint" Nullable="false" />
+    <Property Name="total" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+    <Property Name="cant_prods" Type="int" Nullable="false" />
+    <Property Name="id_empleado" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="productos">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="producto" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="precio" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+    <Property Name="descripcion" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="id_categoria" Type="bigint" Nullable="false" />
+    <Property Name="fecha_ingreso" Type="datetime" Nullable="false" />
+    <Property Name="activo" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__factura_p__id_fa__44FF419A">
+    <End Role="facturas" Type="Self.facturas" Multiplicity="1" />
+    <End Role="factura_productos" Type="Self.factura_productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="facturas">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="factura_productos">
+        <PropertyRef Name="id_factura" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__factura_p__id_pr__440B1D61">
+    <End Role="productos" Type="Self.productos" Multiplicity="1" />
+    <End Role="factura_productos" Type="Self.factura_productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="productos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="factura_productos">
+        <PropertyRef Name="id_producto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__facturas__id_cli__403A8C7D">
+    <End Role="clientes" Type="Self.clientes" Multiplicity="1" />
+    <End Role="facturas" Type="Self.facturas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="clientes">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="facturas">
+        <PropertyRef Name="id_cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__facturas__id_emp__412EB0B6">
+    <End Role="empleados" Type="Self.empleados" Multiplicity="1" />
+    <End Role="facturas" Type="Self.facturas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="empleados">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="facturas">
+        <PropertyRef Name="id_empleado" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__productos__id_ca__3D5E1FD2">
+    <End Role="categorias" Type="Self.categorias" Multiplicity="1" />
+    <End Role="productos" Type="Self.productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="categorias">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="productos">
+        <PropertyRef Name="id_categoria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="libreria_dbModelStoreContainer">
+    <EntitySet Name="categorias" EntityType="Self.categorias" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="clientes" EntityType="Self.clientes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="empleados" EntityType="Self.empleados" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="factura_productos" EntityType="Self.factura_productos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="facturas" EntityType="Self.facturas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="productos" EntityType="Self.productos" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__factura_p__id_fa__44FF419A" Association="Self.FK__factura_p__id_fa__44FF419A">
+      <End Role="facturas" EntitySet="facturas" />
+      <End Role="factura_productos" EntitySet="factura_productos" />
+    </AssociationSet>
+    <AssociationSet Name="FK__factura_p__id_pr__440B1D61" Association="Self.FK__factura_p__id_pr__440B1D61">
+      <End Role="productos" EntitySet="productos" />
+      <End Role="factura_productos" EntitySet="factura_productos" />
+    </AssociationSet>
+    <AssociationSet Name="FK__facturas__id_cli__403A8C7D" Association="Self.FK__facturas__id_cli__403A8C7D">
+      <End Role="clientes" EntitySet="clientes" />
+      <End Role="facturas" EntitySet="facturas" />
+    </AssociationSet>
+    <AssociationSet Name="FK__facturas__id_emp__412EB0B6" Association="Self.FK__facturas__id_emp__412EB0B6">
+      <End Role="empleados" EntitySet="empleados" />
+      <End Role="facturas" EntitySet="facturas" />
+    </AssociationSet>
+    <AssociationSet Name="FK__productos__id_ca__3D5E1FD2" Association="Self.FK__productos__id_ca__3D5E1FD2">
+      <End Role="categorias" EntitySet="categorias" />
+      <End Role="productos" EntitySet="productos" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
